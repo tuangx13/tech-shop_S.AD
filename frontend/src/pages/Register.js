@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import MainLayout from "../components/layout/MainLayout";
 import { authAPI } from "../services/api";
 import { setToken, setUser } from "../utils/auth";
 import "./Auth.css";
@@ -104,8 +104,8 @@ function Register() {
   };
 
   return (
-    <div className="auth-page">
-      <Navbar />
+    <MainLayout>
+      <div className="auth-page">
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-header">
@@ -188,7 +188,8 @@ function Register() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </MainLayout>
   );
 }
 

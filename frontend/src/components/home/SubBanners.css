@@ -1,0 +1,90 @@
+.sub-banners-container {
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.promo-banner-large {
+  width: 100%;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-large-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1000px;
+  gap: 20px;
+}
+
+.promo-large-content {
+  display: flex;
+  align-items: center;
+}
+
+.promo-large-title {
+  font-size: 32px;
+  font-weight: 900;
+  margin: 0;
+  font-style: italic;
+  color: #1a4f8b;
+  letter-spacing: -1px;
+}
+
+.text-red {
+  color: var(--primary);
+  background: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-right: 10px;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  transform: rotate(-3deg);
+}
+
+.promo-large-badge {
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 5px 15px;
+  border-radius: 8px;
+  gap: 10px;
+}
+
+.badge-text-small {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.badge-text-large {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.promo-large-btn {
+  background: #111;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .promo-large-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

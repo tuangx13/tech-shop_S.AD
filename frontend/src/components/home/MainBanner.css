@@ -1,0 +1,140 @@
+.main-banner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  background: white;
+  min-width: 0;
+}
+
+.banner-slider {
+  flex: 1;
+  background: linear-gradient(135deg, #7c8fb5 0%, #a4b5d0 50%, #dbe0eb 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-slide {
+  display: flex;
+  padding: 30px;
+  height: 100%;
+}
+
+.banner-content {
+  flex: 1;
+  color: white;
+  z-index: 2;
+}
+
+.banner-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+}
+
+.banner-headline {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.banner-price {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+.banner-price span {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.banner-features {
+  display: flex;
+  background: white;
+  color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 25px;
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.feature-item {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.feature-middle {
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+}
+
+.feature-title { font-size: 10px; color: #666; }
+.feature-value { font-size: 14px; font-weight: bold; color: var(--primary); }
+.feature-subtitle { font-size: 9px; color: #999; }
+.feature-desc { font-size: 10px; color: #666; }
+
+.banner-btn {
+  background: white;
+  color: #1a4f8b;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+.banner-btn:hover {
+  transform: scale(1.05);
+}
+
+.banner-controls {
+  display: flex;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+.control-item {
+  flex: 1;
+  padding: 10px 5px;
+  text-align: center;
+  font-size: 11px;
+  cursor: pointer;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  border-right: 1px solid #eee;
+}
+.control-item:last-child {
+  border-right: none;
+}
+.control-item.active {
+  font-weight: bold;
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.banner-image-placeholder {
+  position: absolute;
+  right: -50px;
+  bottom: -20px;
+  width: 50%;
+  height: 90%;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Samsung_Galaxy_S24_Ultra.png/320px-Samsung_Galaxy_S24_Ultra.png') no-repeat right bottom;
+  background-size: contain;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .banner-features { display: none; }
+  .banner-controls { display: none; }
+  .banner-headline { font-size: 28px; }
+  .banner-image-placeholder { opacity: 0.5; right: 0; }
+}

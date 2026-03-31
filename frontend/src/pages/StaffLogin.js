@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authAPI } from "../services/api";
 import { setToken, setUser } from "../utils/auth";
+import MainLayout from "../components/layout/MainLayout";
 import "./Auth.css";
 
 function StaffLogin() {
@@ -35,7 +36,8 @@ function StaffLogin() {
   };
 
   return (
-    <div className="auth-page staff-auth">
+    <MainLayout>
+      <div className="auth-page staff-auth">
       <div className="auth-container">
         <div className="auth-card staff-card">
           <div className="auth-header">
@@ -90,7 +92,8 @@ function StaffLogin() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </MainLayout>
   );
 }
 

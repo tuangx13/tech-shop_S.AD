@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import MainLayout from "../components/layout/MainLayout";
+import CategorySidebar from "../components/home/CategorySidebar";
+import MainBanner from "../components/home/MainBanner";
+import RightSidebar from "../components/home/RightSidebar";
+import SubBanners from "../components/home/SubBanners";
+import ProductGridSection from "../components/home/ProductGridSection";
 import ProductCard from "../components/ProductCard";
 import { laptopAPI, mobileAPI, customerAPI } from "../services/api";
 import { isAuthenticated, getUser } from "../utils/auth";
@@ -31,7 +36,7 @@ function Home() {
       setLaptops(laptopRes.data);
       setMobiles(mobileRes.data);
     } catch (err) {
-      setError("Khong the tai san pham. Vui long thu lai sau.");
+      setError("Không thể tải sản phẩm. Vui lòng thử lại sau.");
       console.error("Error fetching products:", err);
     } finally {
       setLoading(false);
@@ -46,7 +51,7 @@ function Home() {
 
     const user = getUser();
     if (user.role !== "customer") {
-      setMessage("Chi khach hang moi co the them san pham vao gio hang.");
+      setMessage("Chỉ khách hàng mới có thể thêm sản phẩm vào giỏ hàng.");
       setTimeout(() => setMessage(""), 3000);
       return;
     }
@@ -59,15 +64,14 @@ function Home() {
         product_price: product.price,
         quantity: 1,
       });
-      setMessage(`Da them ${product.name} vao gio hang!`);
+      setMessage(`Đã thêm ${product.name} vào giỏ hàng!`);
       setTimeout(() => setMessage(""), 3000);
     } catch (err) {
-      setMessage("Khong the them san pham vao gio hang.");
+      setMessage("Không thể thêm sản phẩm vào giỏ hàng.");
       setTimeout(() => setMessage(""), 3000);
     }
   };
 
-  // Filter products based on search query
   const filterProducts = (products) => {
     if (!searchQuery.trim()) return products;
     const query = searchQuery.toLowerCase();
@@ -75,11 +79,10 @@ function Home() {
       (p) =>
         (p.name || "").toLowerCase().includes(query) ||
         (p.brand || "").toLowerCase().includes(query) ||
-        (p.description || "").toLowerCase().includes(query),
+        (p.description || "").toLowerCase().includes(query)
     );
   };
 
-  // Combine and filter all products for search results
   const getSearchResults = () => {
     const filteredLaptops = filterProducts(laptops).map((p) => ({
       ...p,
@@ -94,13 +97,12 @@ function Home() {
 
   if (loading) {
     return (
-      <div>
-        <Navbar />
+      <MainLayout>
         <div className="loading-container">
           <div className="spinner"></div>
-          <p>Dang tai san pham...</p>
+          <p>Đang tải sản phẩm...</p>
         </div>
-      </div>
+      </MainLayout>
     );
   }
 
@@ -108,34 +110,30 @@ function Home() {
   const searchResults = isSearching ? getSearchResults() : [];
 
   return (
-    <div className="home-page">
-      <Navbar />
+    <MainLayout>
+      <div className="home-container container-lg">
+        {message && <div className="toast-message">{message}</div>}
+        {error && <div className="error-banner">{error}</div>}
 
-      {message && <div className="toast-message">{message}</div>}
-
-      {/* Hero Section - only show when not searching */}
-      {!isSearching && (
-        <section className="hero">
-          <div className="hero-content">
-            <h1>Chào mừng đến với TechShop</h1>
-            <p>Khám phá các sản phẩm cộng nghệ hàng đầu với giá tốt nhất</p>
-          </div>
-        </section>
-      )}
-
-      {error && <div className="error-banner">{error}</div>}
-
-      {/* Search Results - unified view */}
-      {isSearching ? (
-        <section className="product-section">
-          <div className="container">
-            <div className="section-header">
-              <h2>Kết quả tìm kiếm: "{searchQuery}"</h2>
-              <p>Tìm thấy {searchResults.length} sản phẩm</p>
+        {!isSearching && (
+          <>
+            {/* Top Row: Sidebar, Banner, RightSidebar */}
+            <div className="home-top-row">
+              <CategorySidebar />
+              <MainBanner />
+              <RightSidebar />
             </div>
 
+            {/* Sub banners */}
+            <SubBanners />
+          </>
+        )}
+
+        {isSearching ? (
+          <div className="search-results-section">
+            <h2 className="search-title">Kết quả tìm kiếm cho: "{searchQuery}"</h2>
             {searchResults.length > 0 ? (
-              <div className="product-grid">
+              <div className="product-grid-inner" style={{marginTop:'20px'}}>
                 {searchResults.map((product) => (
                   <ProductCard
                     key={`${product.type}-${product.id}`}
@@ -149,86 +147,34 @@ function Home() {
               <p className="no-products">Không tìm thấy sản phẩm phù hợp.</p>
             )}
           </div>
-        </section>
-      ) : (
-        <>
-          {/* Laptops Section */}
-          <section id="laptops" className="product-section">
-            <div className="container">
-              <div className="section-header">
-                <h2>Laptop</h2>
-                <p>Laptop chính hãng từ các thương hiệu hàng đầu</p>
-              </div>
+        ) : (
+          <>
+            <ProductGridSection
+              title="ĐIỆN THOẠI NỔI BẬT"
+              brands={['Apple', 'Samsung', 'Xiaomi', 'OPPO', 'Nokia']}
+              products={mobiles}
+              type="mobile"
+              onAddToCart={handleAddToCart}
+            />
 
-              {laptops.length > 0 ? (
-                <div className="product-grid">
-                  {laptops.map((laptop) => (
-                    <ProductCard
-                      key={laptop.id}
-                      product={laptop}
-                      type="laptop"
-                      onAddToCart={handleAddToCart}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p className="no-products">Chưa có sản phâm laptop nào.</p>
-              )}
-            </div>
-          </section>
-
-          {/* Mobiles Section */}
-          <section id="mobiles" className="product-section mobile-section">
-            <div className="container">
-              <div className="section-header">
-                <h2>Điện thoại</h2>
-                <p>Điện thoại thông minh với công nghệ tiên tiến</p>
-              </div>
-
-              {mobiles.length > 0 ? (
-                <div className="product-grid">
-                  {mobiles.map((mobile) => (
-                    <ProductCard
-                      key={mobile.id}
-                      product={mobile}
-                      type="mobile"
-                      onAddToCart={handleAddToCart}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p className="no-products">Chưa có sản phẩm điện thoại nào.</p>
-              )}
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* Footer */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-brand">
-              <h3>TechShop</h3>
-              <p>Cửa hàng công nghệ uy tín hàng đầu</p>
-            </div>
-            <div className="footer-links">
-              <h4>Liên kết</h4>
-              <a href="#laptops">Laptop</a>
-              <a href="#mobiles">Điện thoại</a>
-            </div>
-            <div className="footer-contact">
-              <h4>Liên hệ</h4>
-              <p>Email: contact@techshop.vn</p>
-              <p>Hotline: 1900-xxxx</p>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p>&copy; 2024 TechShop. All rights reserved.</p>
-          </div>
+            <ProductGridSection
+              title="LAPTOP HOT"
+              brands={['MacBook', 'Asus', 'Dell', 'HP', 'Lenovo', 'Acer']}
+              products={laptops}
+              type="laptop"
+              onAddToCart={handleAddToCart}
+            />
+          </>
+        )}
+      </div>
+      
+      {/* Footer replacing the old one momentarily or keeping basic */}
+      <footer className="footer-basic">
+        <div className="container-lg text-center">
+          <p>&copy; 2024 CellphoneS Clone - Designed for professional appearance</p>
         </div>
       </footer>
-    </div>
+    </MainLayout>
   );
 }
 

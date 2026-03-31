@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getUser, logout } from "../utils/auth";
 import { customerAPI } from "../services/api";
-import Navbar from "../components/Navbar";
+import MainLayout from "../components/layout/MainLayout";
 import "./CustomerDashboard.css";
 
 function CustomerDashboard() {
@@ -71,19 +71,18 @@ function CustomerDashboard() {
 
   if (loading) {
     return (
-      <div>
-        <Navbar />
+      <MainLayout>
         <div className="loading-container">
           <div className="spinner"></div>
           <p>Đang tải giỏ hàng...</p>
         </div>
-      </div>
+      </MainLayout>
     );
   }
 
   return (
-    <div className="customer-dashboard">
-      <Navbar />
+    <MainLayout>
+      <div className="customer-dashboard">
 
       {message && <div className="toast-message">{message}</div>}
 
@@ -172,7 +171,8 @@ function CustomerDashboard() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </MainLayout>
   );
 }
 

@@ -1,0 +1,129 @@
+.product-section-wrapper {
+  margin-bottom: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.product-section-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.product-section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #333;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.product-brand-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.brand-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.brand-list::-webkit-scrollbar {
+  display: none;
+}
+
+.brand-tab {
+  background: white;
+  border: 1px solid var(--gray-200);
+  padding: 6px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--gray-700);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.brand-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.view-all-link {
+  font-size: 13px;
+  color: #2b6cb0;
+  white-space: nowrap;
+  margin-left: 15px;
+  text-decoration: none;
+}
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+.product-section-content {
+  display: flex;
+  padding: 15px;
+  gap: 15px;
+}
+
+.product-side-banner {
+  width: 250px;
+  min-height: 340px;
+  background: linear-gradient(135deg, #7dd3fc, #38bdf8);
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  color: white;
+}
+
+.laptop-banner {
+  background: linear-gradient(135deg, #818cf8, #4f46e5);
+}
+
+.banner-text {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.product-grid-area {
+  flex: 1;
+}
+
+.product-grid-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.no-products {
+  padding: 40px;
+  text-align: center;
+  color: var(--gray-500);
+}
+
+@media (max-width: 1024px) {
+  .product-side-banner {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-brand-tabs {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .product-grid-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

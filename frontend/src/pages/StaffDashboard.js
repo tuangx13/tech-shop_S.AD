@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUser, logout } from "../utils/auth";
 import { laptopAPI, mobileAPI } from "../services/api";
+import MainLayout from "../components/layout/MainLayout";
 
 function StaffDashboard() {
   const [user, setUser] = useState(null);
@@ -169,73 +170,9 @@ function StaffDashboard() {
   }
 
   return (
-    <div>
-      <div className="navbar">
-        <div>
-          <h2
-            style={{
-              margin: 0,
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            👨‍💼 Staff Dashboard
-          </h2>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-          {/* FIX: Thêm whiteSpace: "nowrap" để chữ Xin chào luôn nằm trên 1 dòng ngang */}
-          <span
-            style={{ color: "white", fontWeight: "500", whiteSpace: "nowrap" }}
-          >
-            {user?.username}
-          </span>
-
-          <button
-            onClick={() => navigate("/")}
-            className="btn"
-            style={{
-              background: "transparent",
-              color: "white",
-              border: "2px solid white",
-              margin: 0,
-              height: "38px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent:
-                "center" /* Căn giữa chữ "Trang chủ" bên trong nút */,
-              borderRadius: "25px",
-              padding: "0 20px",
-              whiteSpace:
-                "nowrap" /* Đảm bảo chữ trong nút không bị rớt dòng */,
-            }}
-          >
-            Trang chủ
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="btn btn-danger"
-            style={{
-              margin: 0,
-              height: "38px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent:
-                "center" /* Căn giữa chữ "Đăng xuất" bên trong nút */,
-              borderRadius: "25px",
-              padding: "0 20px",
-              whiteSpace: "nowrap",
-              backgroundColor: "#dc3545" /* Màu đỏ cho nút đăng xuất */,
-              color: "white",
-              border: "none",
-            }}
-          >
-            Đăng xuất
-          </button>
-        </div>
-      </div>
+    <MainLayout>
+      <div style={{ padding: '20px', background: '#f4f6f8' }}>
+        <h2 style={{ marginBottom: '20px' }}>👨‍💼 Staff Dashboard - Xin chào {user?.username}</h2>
 
       {message && (
         <div
@@ -630,7 +567,8 @@ function StaffDashboard() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </MainLayout>
   );
 }
 
