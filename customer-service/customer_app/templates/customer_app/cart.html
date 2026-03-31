@@ -1,0 +1,35 @@
+{% extends "customer_app/base.html" %}
+{% block title %}Giỏ hàng - Customer Portal{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 20px;">🛒 Giỏ hàng của bạn</h1>
+
+{% if cart.items.all %}
+<div style="margin-bottom: 20px;">
+    {% for item in cart.items.all %}
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h3>{{ item.product_name }}</h3>
+            <p class="product-specs">
+                Loại: {% if item.product_type == 'laptop' %}💻 Laptop{% else %}📱 Điện thoại{% endif %}
+                | Số lượng: {{ item.quantity }}
+            </p>
+            <p class="price">{{ item.total_price|floatformat:0 }} VNĐ</p>
+        </div>
+        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">✕ Xóa</a>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card" style="text-align: right;">
+    <h2>Tổng cộng: <span class="price">{{ cart.total_price|floatformat:0 }} VNĐ</span></h2>
+    <p style="color: #888; margin-top: 5px;">{{ cart.total_items }} sản phẩm</p>
+</div>
+
+{% else %}
+<div class="card">
+    <p style="color: #888; text-align: center; padding: 30px;">
+        Giỏ hàng trống. <a href="{% url 'dashboard' %}" style="color: #6495ED;">Mua sắm ngay!</a>
+    </p>
+</div>
+{% endif %}
+{% endblock %}

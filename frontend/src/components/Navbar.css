@@ -1,0 +1,213 @@
+.navbar {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  padding: 0 30px;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  gap: 20px;
+}
+
+.navbar-brand {
+  flex-shrink: 0;
+}
+
+.navbar-brand a {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+/* Navbar Search */
+.navbar-search {
+  display: flex;
+  flex: 1;
+  max-width: 400px;
+  min-width: 200px;
+}
+
+.navbar-search .search-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 25px 0 0 25px;
+  font-size: 14px;
+  outline: none;
+  min-width: 0;
+}
+
+.navbar-search .search-input::placeholder {
+  color: #999;
+}
+
+.navbar-search .search-btn {
+  padding: 10px 18px;
+  background: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 0 25px 25px 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+
+.navbar-search .search-btn:hover {
+  background: #ff5722;
+}
+
+/* Auth section */
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* FIX CHÍNH Ở ĐÂY */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Username */
+.user-name {
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+
+  height: 38px;
+  display: flex;
+  align-items: center;
+
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* Auth buttons (login/register) */
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Button outline (FIX) */
+.navbar .btn-outline {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  margin: 0;
+  padding: 0 16px; /* bỏ padding dọc */
+  height: 38px;
+
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.navbar .btn-outline:hover {
+  background: white;
+  color: #1e3c72;
+}
+
+/* Primary button */
+.navbar .btn-primary {
+  background: #ff6b35;
+  color: white;
+  border: none;
+
+  padding: 0 20px;
+  height: 38px;
+  margin: 0;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.navbar .btn-primary:hover {
+  background: #ff5722;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 12px 15px;
+    flex-wrap: wrap;
+    height: auto;
+    gap: 10px;
+  }
+
+  .navbar-brand a {
+    font-size: 20px;
+  }
+
+  .navbar-search {
+    order: 3;
+    max-width: 100%;
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .navbar-auth {
+    gap: 8px;
+  }
+
+  .user-name {
+    padding: 0 10px;
+    font-size: 12px;
+    height: 34px;
+  }
+
+  .navbar .btn-outline {
+    height: 34px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+
+  .navbar .btn-primary {
+    height: 34px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-name {
+    display: none;
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Register</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .register-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .register-header { text-align: center; margin-bottom: 30px; }
+        .register-header .icon { font-size: 2.5em; display: block; margin-bottom: 10px; }
+        .register-header h1 { color: #6495ED; font-size: 1.6em; margin-bottom: 8px; }
+        .register-header p { color: #888; font-size: 0.9em; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; color: #bbb; margin-bottom: 6px; font-size: 0.85em; font-weight: 500; }
+        .form-group input {
+            width: 100%; padding: 12px 14px; border: 1px solid rgba(100, 149, 237, 0.3);
+            border-radius: 10px; background: rgba(255,255,255,0.05); color: #e0e0e0;
+            font-size: 14px; outline: none; transition: all 0.3s;
+        }
+        .form-group input:focus { border-color: #6495ED; box-shadow: 0 0 15px rgba(100,149,237,0.2); }
+        .btn-register {
+            width: 100%; padding: 14px; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #4169E1, #6495ED); color: white;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 5px;
+        }
+        .btn-register:hover { background: linear-gradient(135deg, #3157c9, #5a8ae0); transform: translateY(-2px); }
+        .login-link { text-align: center; margin-top: 20px; color: #888; font-size: 0.9em; }
+        .login-link a { color: #6495ED; text-decoration: none; font-weight: 600; }
+        .errorlist { list-style: none; color: #f5a5ae; font-size: 0.8em; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <span class="icon">🛒</span>
+            <h1>Đăng ký Customer</h1>
+            <p>Tạo tài khoản để bắt đầu mua sắm</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                       id="{{ field.id_for_label }}" name="{{ field.html_name }}" 
+                       placeholder="{{ field.label }}" {% if field.field.required %}required{% endif %}>
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-register">Đăng ký</button>
+        </form>
+        <div class="login-link">
+            Đã có tài khoản? <a href="{% url 'login' %}">Đăng nhập</a>
+        </div>
+    </div>
+</body>
+</html>

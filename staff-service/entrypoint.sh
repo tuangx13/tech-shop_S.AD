@@ -1,0 +1,12 @@
+﻿#!/bin/bash
+set -e
+
+echo "Waiting for database..."
+sleep 8
+
+echo "Running migrations..."
+python manage.py makemigrations staff_app
+python manage.py migrate
+
+echo "Starting server..."
+python manage.py runserver 0.0.0.0:8000

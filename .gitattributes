@@ -1,0 +1,8 @@
+* text=auto
+
+# Shell scripts - always Unix line endings
+*.sh eol=lf
+
+# Docker files - Unix line endings
+Dockerfile eol=lf
+docker-compose.yml eol=lf

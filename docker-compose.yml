@@ -1,0 +1,231 @@
+services:
+  # ==================== DATABASES ====================
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-mysql.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p123",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - microservices_net
+
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: laptop_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-postgres.sh:/docker-entrypoint-initdb.d/init.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - microservices_net
+
+  # ==================== DATABASE TOOLS (WEB UI) ====================
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_web
+    restart: always
+    ports:
+      - "8081:80" # Truy cập tại http://localhost:8081
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - ARBITRARY=1
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - microservices_net
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_web
+    restart: always
+    ports:
+      - "8082:80" # Truy cập tại http://localhost:8082
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - microservices_net
+
+  # ==================== SERVICES ====================
+  auth:
+    build: ./auth-service
+    container_name: auth_service
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_ENGINE=django.db.backends.mysql
+      - DB_NAME=auth_db
+      - DB_USER=root
+      - DB_PASSWORD=123
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - JWT_SECRET_KEY=your-secret-key-change-in-production
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - microservices_net
+
+  customer:
+    build: ./customer-service
+    container_name: customer_service
+    restart: always
+    ports:
+      - "8001:8000"
+    environment:
+      - DB_ENGINE=django.db.backends.mysql
+      - DB_NAME=customer_db
+      - DB_USER=root
+      - DB_PASSWORD=123
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - LAPTOP_SERVICE_URL=http://laptop:8000
+      - MOBILE_SERVICE_URL=http://mobile:8000
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - microservices_net
+
+  staff:
+    build: ./staff-service
+    container_name: staff_service
+    restart: always
+    ports:
+      - "8002:8000"
+    environment:
+      - DB_ENGINE=django.db.backends.mysql
+      - DB_NAME=staff_db
+      - DB_USER=root
+      - DB_PASSWORD=123
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - LAPTOP_SERVICE_URL=http://laptop:8000
+      - MOBILE_SERVICE_URL=http://mobile:8000
+      - AUTH_SERVICE_URL=http://auth:8000
+      - JWT_SECRET_KEY=your-secret-key-change-in-production
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth:
+        condition: service_started
+    networks:
+      - microservices_net
+
+  laptop:
+    build: ./laptop-service
+    container_name: laptop_service
+    restart: always
+    ports:
+      - "8003:8000"
+    environment:
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=laptop_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgrespassword
+      - DB_HOST=postgres
+      - DB_PORT=5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - microservices_net
+
+  mobile:
+    build: ./mobile-service
+    container_name: mobile_service
+    restart: always
+    ports:
+      - "8004:8000"
+    environment:
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=mobile_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgrespassword
+      - DB_HOST=postgres
+      - DB_PORT=5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - microservices_net
+
+  gateway:
+    build: ./api-gateway
+    container_name: api_gateway
+    restart: always
+    ports:
+      - "8080:8000"
+    environment:
+      - AUTH_SERVICE_URL=http://auth:8000
+      - CUSTOMER_SERVICE_URL=http://customer:8000
+      - STAFF_SERVICE_URL=http://staff:8000
+      - LAPTOP_SERVICE_URL=http://laptop:8000
+      - MOBILE_SERVICE_URL=http://mobile:8000
+      - JWT_SECRET_KEY=your-secret-key-change-in-production
+    depends_on:
+      - auth
+      - customer
+      - staff
+      - laptop
+      - mobile
+    networks:
+      - microservices_net
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_app
+    restart: always
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_GATEWAY=http://localhost:8080
+    depends_on:
+      - gateway
+    networks:
+      - microservices_net
+
+volumes:
+  mysql_data:
+  postgres_data:
+
+networks:
+  microservices_net:
+    driver: bridge

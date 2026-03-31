@@ -1,0 +1,65 @@
+{% extends "customer_app/base.html" %}
+{% block title %}Tìm kiếm - Customer Portal{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 20px;">🔍 Tìm kiếm sản phẩm</h1>
+
+<form action="{% url 'search' %}" method="get" style="margin-bottom: 30px;">
+    <div style="display: flex; gap: 10px;">
+        <input type="search" name="q" value="{{ query }}" placeholder="Nhập tên sản phẩm, thương hiệu..." style="flex: 1;">
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </div>
+</form>
+
+{% if query %}
+<p style="color: #888; margin-bottom: 20px;">Kết quả cho: <strong style="color: #6495ED;">"{{ query }}"</strong></p>
+
+{% if laptops %}
+<h2 class="section-title">💻 Laptop</h2>
+<div class="grid">
+    {% for laptop in laptops %}
+    <div class="card">
+        <h3>{{ laptop.name }}</h3>
+        <p class="product-specs">{{ laptop.brand }} | CPU: {{ laptop.cpu }} | RAM: {{ laptop.ram }}</p>
+        <p class="price">{{ laptop.price|floatformat:0 }} VNĐ</p>
+        <form method="post" action="{% url 'add_to_cart' %}" style="margin-top: 10px;">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ laptop.id }}">
+            <input type="hidden" name="product_type" value="laptop">
+            <input type="hidden" name="product_name" value="{{ laptop.name }}">
+            <input type="hidden" name="product_price" value="{{ laptop.price }}">
+            <button type="submit" class="btn btn-primary btn-sm">🛒 Thêm vào giỏ</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if mobiles %}
+<h2 class="section-title" style="margin-top: 25px;">📱 Điện thoại</h2>
+<div class="grid">
+    {% for mobile in mobiles %}
+    <div class="card">
+        <h3>{{ mobile.name }}</h3>
+        <p class="product-specs">{{ mobile.brand }} | RAM: {{ mobile.ram }} | Pin: {{ mobile.battery }}</p>
+        <p class="price">{{ mobile.price|floatformat:0 }} VNĐ</p>
+        <form method="post" action="{% url 'add_to_cart' %}" style="margin-top: 10px;">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ mobile.id }}">
+            <input type="hidden" name="product_type" value="mobile">
+            <input type="hidden" name="product_name" value="{{ mobile.name }}">
+            <input type="hidden" name="product_price" value="{{ mobile.price }}">
+            <button type="submit" class="btn btn-primary btn-sm">🛒 Thêm vào giỏ</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if not laptops and not mobiles %}
+<div class="card"><p style="color: #888;">Không tìm thấy sản phẩm nào phù hợp.</p></div>
+{% endif %}
+
+{% else %}
+<div class="card"><p style="color: #888;">Nhập từ khóa để tìm kiếm sản phẩm laptop và điện thoại.</p></div>
+{% endif %}
+{% endblock %}

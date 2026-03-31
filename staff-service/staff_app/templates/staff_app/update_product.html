@@ -1,0 +1,31 @@
+{% extends "staff_app/base.html" %}
+{% block title %}Cập nhật {{ product_type }} - Staff Portal{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 5px;">{{ icon }} Cập nhật {{ product_type }}</h1>
+<p style="color: #888; margin-bottom: 30px;">Chỉnh sửa thông tin sản phẩm</p>
+
+<div class="card" style="max-width: 600px;">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.field.widget.input_type == 'textarea' or field.name == 'description' %}
+                <textarea id="{{ field.id_for_label }}" name="{{ field.html_name }}" 
+                          rows="3">{{ field.value|default:'' }}</textarea>
+            {% else %}
+                <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                       id="{{ field.id_for_label }}" name="{{ field.html_name }}"
+                       value="{{ field.value|default:'' }}"
+                       {% if field.field.required %}required{% endif %}>
+            {% endif %}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button type="submit" class="btn btn-warning">✏️ Cập nhật</button>
+            <a href="{% url 'dashboard' %}" class="btn" style="background: rgba(255,255,255,0.1);">← Quay lại</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
